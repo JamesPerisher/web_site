@@ -1,0 +1,100 @@
+body {
+  background: #36393F;
+  font-family: Arial;
+  font-size: 16px;
+  margin-top: 0px;
+  margin-left: 0px;
+  margin-right: 1px;
+}
+
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  background: transparent;
+}
+
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+  background: #202225;
+  border-radius: 5px;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #202225;
+  overflow: hidden;
+}
+
+.topnav .right {
+  float: right;
+  color: #7e0000;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Style the links inside the navigation bar */
+.topnav .cat {
+  float: left;
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav-mobile .cat {
+  float: none;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #7e0000;
+  color: white;
+}
+
+.topnav-mobile {
+  float: none;
+  display: block;
+}
+
+.topnav-mobile a {
+  float: none;
+  display: block;
+}
+
+.font-form h1 {
+  color: #ffffff;
+  color: #7e0000;
+  padding-left: 7px;
+}
+
+.font-form h2 {
+  color: #ffffff;
+  font-size: 20px;
+  padding-left: 7px;
+}
+
+.font-form p {
+  color: #ffffff;
+  font-size: 17px;
+}
+
+/*
+colours:
+202225  = dark
+2F3136  = middle
+36393F  = background
+ffffff  = bright - titles
+*/

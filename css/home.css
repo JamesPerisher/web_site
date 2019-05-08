@@ -1,0 +1,64 @@
+.main_message {
+  width: 33%;
+  float:left; /* add this */
+
+
+  text-align: left;
+  padding: 14px 16px;
+  padding-left: 10%;
+  padding-top: 5%;
+  height: 450px;
+}
+
+.message {
+  padding-left: 0px;
+  background-color: #2F3136 ;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+
+
+.message h1{
+  color: #ffffff;
+  padding-left: 7px;
+}
+
+.message p{
+  color: #ffffff;
+  font-size: 17px;
+}
+
+
+.container img {
+   width: 100%;
+}
+
+
+
+
+#joinButton {
+  float: left;
+  width: 100%;
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 0px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+#joinButton:hover {
+  background-color: #7e0000;
+  color: #ffffff;
+}
+
+/* Add a color to the active/current link */
+#joinButton.active {
+  background-color: #7e0000;
+  color: #7e0000;
+}
+
+#msgrght {
+  width : 71%;
+}

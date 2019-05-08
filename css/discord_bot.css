@@ -1,0 +1,102 @@
+.main_message {
+  width: 30%;
+  float: left;
+  text-align: left;
+  padding: 14px 1%;
+  padding-left: 5%;
+  padding-top: 5%;
+}
+
+.message {
+  padding-left: 0px;
+  background-color: #2F3136;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.message .left {
+  padding-top: 5px;
+  padding-left: 7px;
+}
+
+.message h1 {
+  color: #ffffff;
+  color: #7e0000;
+  padding-left: 7px;
+}
+
+.message h2 {
+  color: #ffffff;
+  font-size: 20px;
+  padding-left: 7px;
+}
+
+.message p {
+  color: #ffffff;
+  font-size: 17px;
+  padding-left: 10%;
+}
+
+.container img {
+  width: 100%;
+}
+
+#AddButton {
+  float: left;
+  width: 100%;
+  color: #ffffff;
+  text-align: center;
+  padding: 14px 0px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+#AddButton:hover {
+  background-color: #7e0000;
+  color: #ffffff;
+}
+
+/* Add a color to the active/current link */
+#AddButton.active {
+  background-color: #7e0000;
+  color: #7e0000;
+}
+
+#msgrght {
+  width: 71%;
+}
+
+.command_table {
+  background-color: #2F3136;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-border-bottom-left-radius: 5px;
+  -moz-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.topbar {
+  background-color: #7e0000;
+  margin-bottom: 0px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding: 0px 0px;
+  color: #ffffff;
+  padding-left: 5px;
+  padding-left: 5px;
+  padding: 4px 6px;
+}
+
+.command_table tr, td {
+  color: #aaaaaa;
+  padding-left: 5px;
+  padding: 4px 6px;
+}
+
+.command_table tr:nth-child(even) {
+  background-color: #202225;
+}
