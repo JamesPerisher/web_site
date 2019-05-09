@@ -74,6 +74,10 @@ html {
   display: block;
 }
 
+.topnav #myLinks {
+  display: none;
+}
+
 .font-form h1 {
   color: #ffffff;
   color: #7e0000;
