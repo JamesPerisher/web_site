@@ -58,6 +58,9 @@ function topbar(current) { // default navagarion bar HTML
     var d1 = document.getElementsByTagName("header")[0];
     d1.insertAdjacentHTML('beforeEnd', doc.firstChild.querySelector('body > div.id564').innerHTML);
   } else { // display pc version
+
+    doc.getElementsByClassName("icon")[0].setAttribute("style", "display: none");
+
     doc.querySelector("#myLinks").setAttribute("id", "none");
     var d1 = document.getElementsByTagName("header")[0];
     d1.insertAdjacentHTML('beforeEnd', doc.firstChild.querySelector('body > div.id564').innerHTML);

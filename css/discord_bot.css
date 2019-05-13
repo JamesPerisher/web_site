@@ -16,7 +16,7 @@
 
 .message .left {
   padding-top: 5px;
-  padding-left: 7px;
+  padding-left: 15px;
 }
 
 .message h1 {
@@ -91,10 +91,24 @@
   padding: 4px 6px;
 }
 
-.command_table tr, td {
+.command_table td {
   color: #aaaaaa;
   padding-left: 5px;
   padding: 4px 6px;
+}
+
+.list_table td {
+  color: #ffffff;
+  padding-left: 5px;
+  padding: 4px 6px;
+}
+
+.list_table td {
+  padding-left: 15px;
+}
+
+table {
+  width: 100%;
 }
 
 .command_table tr:nth-child(even) {
