@@ -1,8 +1,7 @@
 .main_message {
   width: 33%;
-  float:left; /* add this */
-
-
+  float: left;
+  /* add this */
   text-align: left;
   padding: 14px 16px;
   padding-left: 10%;
@@ -12,30 +11,24 @@
 
 .message {
   padding-left: 0px;
-  background-color: #2F3136 ;
+  background-color: #2F3136;
   border-radius: 5px;
   overflow: hidden;
 }
 
-
-
-.message h1{
+.message h1 {
   color: #ffffff;
   padding-left: 7px;
 }
 
-.message p{
+.message p {
   color: #ffffff;
   font-size: 17px;
 }
 
-
 .container img {
-   width: 100%;
+  width: 100%;
 }
-
-
-
 
 #joinButton {
   float: left;
@@ -60,5 +53,5 @@
 }
 
 #msgrght {
-  width : 71%;
+  width: 71%;
 }
