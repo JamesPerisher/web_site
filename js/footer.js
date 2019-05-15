@@ -8,7 +8,7 @@ function footer(current) { // default navagarion bar HTML
         \<p>Conact:   <a href=\"#conact\">examplemail@email.com</a></p>\
         \<p>@PaulN07#2596</p>\
         \ \
-        \<a href=\"https://github.com/JamesPerishe\"><img class=\"img\" src=\"images/github_icon.svg\"></a>\
+        \<a href=\"https://github.com/JamesPerisher\"><img class=\"img\" src=\"images/github_icon.svg\"></a>\
       \</div>\
       \</div>";
 
