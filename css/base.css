@@ -5,11 +5,14 @@ body {
   margin-top: 0px;
   margin-left: 0px;
   margin-right: 1px;
+  margin-bottom: 0px;
 }
 
 html {
   overflow: scroll;
   overflow-x: hidden;
+  margin: 0px 0px;
+  padding: 0px 0px;
 }
 
 ::-webkit-scrollbar {
@@ -64,6 +67,13 @@ html {
   color: white;
 }
 
+.footer {
+  background-color: #ff00ff;
+  clear: both;
+  position: relative;
+  height: 40px;
+}
+
 .topnav-mobile {
   float: none;
   display: block;
@@ -93,6 +103,50 @@ html {
 .font-form p {
   color: #ffffff;
   font-size: 17px;
+}
+
+.footer {
+  background-color: #202225;
+  clear: both;
+  position: relative;
+  height: 60px;
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.footer p {
+  text-align: center;
+  display: inline;
+  color: #ffffff;
+}
+
+.footer>p {
+  display: inline-block;
+  display: -moz-inline-box;
+  *display: inline;
+  /* For IE7 */
+  zoom: 1;
+  /* Trigger hasLayout */
+  width: 24%;
+  text-align: center;
+}
+
+.footer img {
+  height: 30px;
+  width: 30px;
+}
+
+.footer a {
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: #7e0000;
 }
 
 /*
