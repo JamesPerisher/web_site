@@ -1,0 +1,15 @@
+/* The popup form - hidden by default */
+.form-popup {
+  width: 50%;
+  display: none;
+  bottom: calc(50% - 25% + 12.5%);
+  right: calc(50% - 37.5%);
+  margin: 0px 0px;
+}
+
+/* Add styles to the form container */
+.form-container {
+  padding: 10px;
+  background-color: #2F3136;
+  border-radius: 5px;
+}

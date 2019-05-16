@@ -8,6 +8,10 @@ body {
   margin-bottom: 0px;
 }
 
+.page_content {
+  min-height: calc(100vh - 60px);
+}
+
 html {
   overflow: scroll;
   overflow-x: hidden;
