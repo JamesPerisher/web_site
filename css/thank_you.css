@@ -1,0 +1,15 @@
+h1 {
+  color: #7e0000;
+  padding-left: 2%;
+  font-size: 500%;
+}
+
+p {
+  color: #ffffff;
+  padding-left: 2%;
+  font-size: 100%;
+}
+
+.content {
+  padding: 10% 10%;
+}

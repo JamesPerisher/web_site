@@ -12,6 +12,12 @@ body {
   min-height: calc(100vh - 60px);
 }
 
+.fake-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 html {
   overflow: scroll;
   overflow-x: hidden;
@@ -93,7 +99,6 @@ html {
 }
 
 .font-form h1 {
-  color: #ffffff;
   color: #7e0000;
   padding-left: 7px;
 }

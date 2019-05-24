@@ -4,7 +4,7 @@ function footer(current) { // default navagarion bar HTML
   var a = "<div class=\"id565\">\
       \<div class=\"footer\">\
         \<p><a href=\"#terms\">Terms</a></p>\
-        \<p><a href=\"donate.html\">Donate</a></p>\
+        \<p><a class=\"fake-link\"onclick=\"openForm()\">Donate</a></p>\
         \<p>Conact:   <a href=\"#conact\">examplemail@email.com</a></p>\
         \<p>@PaulN07#2596</p>\
         \ \
