@@ -10,10 +10,13 @@ document.onkeyup = function(e) {
 
 function openForm() {
   document.getElementById("myForm").style.display = "block";
+  document.getElementsByTagName("html")[0].style.position = "fixed";
+  console.log(document.getElementsByClassName("page_content")[0]);
 }
 
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
+  document.getElementsByTagName("html")[0].style.position = "inherit";
 }
 
 
@@ -53,7 +56,7 @@ function add_button() {
   doc = new DOMParser().parseFromString(a, "text/html");
 
 
-  document.getElementsByTagName("body")[0].insertAdjacentHTML('beforeEnd', doc.querySelector('div.id562').innerHTML);
+  document.getElementsByTagName("header")[0].insertAdjacentHTML('beforeEnd', doc.querySelector('div.id562').innerHTML);
 }
 
 add_button(document.URL.split("/").pop().split(".")[0]); // may break with webpages with no filename extensions
