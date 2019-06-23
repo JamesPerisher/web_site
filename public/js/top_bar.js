@@ -25,10 +25,10 @@ function topbar(current) { // default navagarion bar HTML
   var a = "<div class=\"id564\">\
       \<div class=\"mobile\"><div class=\"topnav\">\
       \<div id=\"myLinks\">\
-      \<a class=\"cat home\" href=\"home.html\">Home</a>\
-      \<a class=\"cat about\" href=\"about.html\">About</a>\
-      \<a class=\"cat discord_bot\" href=\"discord_bot.html\">Discord Bot</a>\
-      \<a class=\"cat res_pack\" href=\"res_pack.html\">Resource pack</a>\
+      \<a class=\"cat home\" href=\"home\">Home</a>\
+      \<a class=\"cat about\" href=\"about\">About</a>\
+      \<a class=\"cat discord_bot\" href=\"discord_bot\">Discord Bot</a>\
+      \<a class=\"cat res_pack\" href=\"res_pack\">Resource pack</a>\
       \</div>\
       \<a href=\"javascript:void(0);\" class=\"icon\" onclick=\"mobile_button()\">\
         \<i class=\"fa fa - bars \"></i>hello\
@@ -75,6 +75,3 @@ function mobile_button() {
     x.style.display = "block";
   }
 }
-
-
-topbar(document.URL.split("/").pop().split(".")[0]); // may break with webpages with no filename extensions

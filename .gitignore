@@ -1,2 +1,19 @@
-# files
-test.html
+# dependencies
+/node_modules
+
+# build
+dist
+
+
+# misc
+.DS_Store
+variables.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.albertignore
+*.map
+
+# private
+start.bat
+page/test.html
