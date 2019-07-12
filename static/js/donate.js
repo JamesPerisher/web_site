@@ -22,7 +22,7 @@ function closeForm() {
 
 function add_button() {
   var a = "<div class=\"id562\">\
-  \<link type=\"text/css\" rel=\"stylesheet\" href=\"css/donate.css\" />\
+  \<link type=\"text/css\" rel=\"stylesheet\" href=\"static/css/donate.css\" />\
   \ \
   \<div id=\"myForm\">\
   \<div class=\"overlay\">\
@@ -37,7 +37,7 @@ function add_button() {
               \<input type=\"image\" src=\"https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" title=\"PayPal - The safer, easier way to pay online!\" alt=\"Donate with PayPal button\" />\
             \</form>\
             \ \
-            \<img src=\"images/bitcoin.png\" alt=\"bitcoin request qr code\">\
+            \<img src=\"static/images/bitcoin.png\" alt=\"bitcoin request qr code\">\
           \</td>\
           \<td class=\"dright\">\
             \<h2>For as little as $1USD you can help support development of projects</h2>\
