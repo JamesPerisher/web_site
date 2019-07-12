@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<header>
+  <title>PaulN07's page</title>
+  <link type="text/css" rel="stylesheet" href="static/css/base.css" />
+  <link type="text/css" rel="stylesheet" href="static/css/queue.css" />
+  <script src="static/js/top_bar.js"></script>
+  <script src="static/js/footer.js"></script>
+  <script src="static/js/donate.js"></script>
+  <script>
+    topbar("queue")
+  </script>
+</header>
+
+<body class="page_content">
+  <h1>2B2T.org Queue</h1>
+  <div class="canvas">
+    <canvas id="myChart" width="400" height="400"></canvas>
+  </div>
+
+  <script>
+    var data = "{{queue}}";
+  </script>
+
+  <script src="static/js/Chart.bundle.min.js"></script>
+
+  <script>
+    data = data.replace(/\\n/g, "\\n")
+      .replace(/\\'/g, "\\'")
+      .replace(/\\"/g, '\\"')
+      .replace(/\\&/g, "\\&")
+      .replace(/\\r/g, "\\r")
+      .replace(/\\t/g, "\\t")
+      .replace(/\\b/g, "\\b")
+      .replace(/\\f/g, "\\f")
+      .replace(/&#34;/g, "\"");
+    // remove non-printable and other non-valid JSON chars
+    data = data.replace(/[\u0000-\u0019]+/g, "");
+    var newdata = JSON.parse(data.toString());
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, newdata)
+  </script>
+
+  <div style="height: 1px;">
+
+  </div>
+
+</body>
+
+</html>

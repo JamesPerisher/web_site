@@ -46,7 +46,7 @@ function add_button() {
       \</table>\
       \ \
       \<div class=\"dbottom\">\
-        \<p style=\"padding: 14px 16px;\">bitcoin address: bc1qh3kmyz4tmet5j0h4gsalua9hr0lmxrpk6nmjv99rlw3279c20vkqsjwu6q</p>\
+        \<p class=\"bitc\">bitcoin address: bc1qh3kmyz4tmet5j0h4gsalua9hr0lmxrpk6nmjv99rlw3279c20vkqsjwu6q</p>\
         \<span class=\"fake-link close\" onclick=\"closeForm()\" name=\"button\">Cancel</span>\
         \<p><br><br><br></p>\
       \</div>\

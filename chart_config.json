@@ -1,0 +1,37 @@
+{
+  "type": "bar",
+  "data": {
+    "labels": "--labels--",
+    "datasets": [{
+      "label": "Queue",
+      "data": "--data--",
+      "type": "line",
+      "pointRadius": 0,
+      "fill": false,
+      "lineTension": 0,
+      "borderWidth": 2
+    }]
+  },
+  "options": {
+    "scales": {
+      "xAxes": [{
+        "type": "time",
+        "distribution": "series",
+        "ticks": {
+          "source": "data",
+          "autoSkip": true
+        }
+      }],
+      "yAxes": [{
+        "scaleLabel": {
+          "display": true,
+          "labelString": "number of people"
+        }
+      }]
+    },
+    "tooltips": {
+      "intersect": false,
+      "mode": "index"
+    }
+  }
+}

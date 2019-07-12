@@ -28,6 +28,7 @@ function topbar(current) { // default navagarion bar HTML
       \<a class=\"cat home\" href=\"home\">Home</a>\
       \<a class=\"cat about\" href=\"about\">About</a>\
       \<a class=\"cat discord_bot\" href=\"discord_bot\">Discord Bot</a>\
+      \<a class=\"cat queue\" href=\"queue\">Queue</a>\
       \<a class=\"cat res_pack\" href=\"res_pack\">Resource pack</a>\
       \</div>\
       \<a href=\"javascript:void(0);\" class=\"icon\" onclick=\"mobile_button()\">\
