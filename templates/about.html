@@ -1,29 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "template.html" %}
+{% block title %}About{% endblock %}
+{% set active='about' %}
 
-<header>
-  <title>PaulN07's page</title>
-  <link type="text/css" rel="stylesheet" href="static/css/base.css" />
-  <link type="text/css" rel="stylesheet" href="static/css/about.css" />
-  <script src="static/js/top_bar.js"></script>
-  <script src="static/js/footer.js"></script>
-  <script src="static/js/donate.js"></script>
-  <script>
-    topbar("about")
-  </script>
-</header>
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
 
-
-
-<body class="page_content">
-  <p style="background:#202225;">dark #202225</p>
-  <p style="background:#2F3136;">middle #2F3136</p>
-  <p style="background:#36393F;">background #36393F</p>
-  <p style="background:#ffffff;">bright #ffffff</p>
-
-  <div style="height: 200px;">
-
-  </div>
-</body>
-
-</html>
+{% block content %}
+<p style="background:#202225;">dark #202225</p>
+<p style="background:#2F3136;">middle #2F3136</p>
+<p style="background:#36393F;">background #36393F</p>
+<p style="background:#ffffff;">bright #ffffff</p>
+<div style="height: 1px"></div>
+{% endblock %}

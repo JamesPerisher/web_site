@@ -1,33 +1,27 @@
-<html>
+{% extends "template.html" %}
+{% block title %}Home{% endblock %}
+{% set active='home' %}
 
-
-<header>
-  <title>PaulN07's page</title>
-  <link type="text/css" rel="stylesheet" href="static/css/base.css" />
-  <link type="text/css" rel="stylesheet" href="static/css/home.css" />
-  <script src="static/js/top_bar.js"></script>
-  <script>
-    topbar("home")
-  </script>
-</header>
+{% block head %}
+{{ super() }}
+<link type="text/css" rel="stylesheet" href="static/css/home.css" />
+{% endblock %}
 
 
 
-<body>
-  <div style="padding-top:200px" class="main_message">
-    <div style="background-color: #36393F;" class="message">
-      <h1>PaulN07's webpage<br>Built because building </h1>
-      <p style="padding-top:50px;padding-left:7px;">This page shows information on some of my important projects I’m working on and also provides the official download for my resource pack</p>
-    </div>
+{% block content %}
+<div style="padding-top:200px" class="main_message">
+  <div style="background-color: #36393F;" class="message">
+    <h1>PaulN07's webpage<br>Built because building </h1>
+    <p style="padding-top:50px;padding-left:7px;">This page shows information on some of my important projects I’m working on and also provides the official download for my resource pack</p>
   </div>
+</div>
 
-  <div style="padding-left:15%;" class="main_message">
-    <div id="msgrght" class="message container">
-      <h1 style="padding-left: 20px;"> Join a basically uncensored discord server</h1>
-      <img src="static/images/discorddisplay.png" alt="cool image of discord server">
-      <a id="joinButton" href="https://discord.gg/2wj94TP" target="_blank">Join Now</a>
-    </div>
+<div style="padding-left:15%;" class="main_message">
+  <div id="msgrght" class="message container">
+    <h1 style="padding-left: 20px;"> Join a basically uncensored discord server</h1>
+    <img src="static/images/discorddisplay.png" alt="cool image of discord server">
+    <a id="joinButton" href="https://discord.gg/2wj94TP" target="_blank">Join Now</a>
   </div>
-</body>
-
-</html>
+</div>
+{% endblock %}

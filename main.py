@@ -37,7 +37,47 @@ def res_pack():
 
 @app.route('/discord_bot')
 def discord_bot():
-    return render_template("discord_bot.html")
+    help_res = """```
+    Information:
+      help         Shows this message.
+      ping         Get a test response
+      info         Get info on user
+      server       Minecrft Server Information
+      player       Minecrft Player Information
+      about        My creator
+
+    Utilities:
+      math         do math
+      random       generate random numbers
+      que          server queue
+      queue        server queue graph
+      admin-help   admin commands help
+
+    Spam:
+      genocide     Whatch the snappening
+      Penis        Display Penis
+      yodish       Yoda speak Yes, hmmm.
+
+    Coins:
+      bal          Your balance
+      send         Send coins
+      baltop       The richest peeps
+
+    Fun:
+      eight-ball   Ask the 8-ball
+      fact         Weird facts!
+      food         In case you get hungry
+      knock        Knock knock
+
+    Type ?help command for more info on a command.
+    You can also type ?help category for more info on a category.
+    ```""".replace("`", "")
+    help_res = help_res.split("\n\n")
+    for i in range(len(help_res)):
+        help_res[i] = [[[e for e in v.strip().split("  ") if e != ""] for v in x.strip().split("\n")] for x in help_res[i].split(":")]
+    help_res = help_res[0:-1]
+
+    return render_template("discord_bot.html", table_data=help_res)
 
 @app.route('/thank_you')
 def thank_you():
@@ -51,7 +91,7 @@ def queue():
     sql_command = "SELECT * FROM que_history WHERE time > %s" %100#%int(time.time()-86400)
     crsr.execute(sql_command)
 
-    queue_data = crsr.fetchall()
+    queue_data = crsr.fetchall() # id, que, online time  [(1, -2, 0, 1559413778), (2, 987, 1612, 1559414010)]
     db_close()
 
     labels = []
@@ -60,8 +100,6 @@ def queue():
         labels.append(str(datetime.fromtimestamp(float(i[3])).astimezone(pytz.utc)).split("+")[0])
         data.append(i[1])
 
-
-    # id, que, online time  [(1, -2, 0, 1559413778), (2, 987, 1612, 1559414010)]
     chart_data = json.load(open("chart_config.json"))
     chart_data["data"] = data
     chart_data["labels"] = labels

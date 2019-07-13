@@ -12,7 +12,7 @@ body {
   margin-bottom: 0px;
 }
 
-.page_content {
+.content {
   min-height: calc(100vh - 60px);
 }
 

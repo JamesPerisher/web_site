@@ -1,48 +1,40 @@
-<!DOCTYPE html>
-<html>
-<header>
-  <title>PaulN07's page</title>
-  <link type="text/css" rel="stylesheet" href="static/css/base.css" />
-  <link type="text/css" rel="stylesheet" href="static/css/res_pack.css" />
-  <script src="static/js/top_bar.js"></script>
-  <script src="static/js/footer.js"></script>
-  <script src="static/js/donate.js"></script>
-  <script>
-    topbar("res_pack")
-  </script>
-</header>
+{% extends "template.html" %}
+{% block title %}Resource Pack{% endblock %}
+{% set active='res_pack' %}
 
-<body class="page_content">
-  <div class="top_img">
-    <img src="static/images/image_top.png" alt="cool image of discord server">
+{% block head %}
+{{ super() }}
+<link type="text/css" rel="stylesheet" href="static/css/res_pack.css" />
+{% endblock %}
+
+{% block content %}
+<div class="top_img">
+  <img src="static/images/image_top.png" alt="cool image of discord server">
+</div>
+
+<div class="downloads">
+  <a href="" download="PaulN07_custompack_1_12">Download latest</a>
+  <a href="" download="PaulN07_custompack_1_12">Version 1.14.x</a>
+  <a href="" download="PaulN07_custompack_1_12">Version 1.13.x</a>
+  <a href="" download="PaulN07_custompack_1_12">Version 1.12.x</a>
+</div>
+
+<div style="padding-top:33px;width:50%;" class="main_message">
+  <div style="background-color: #36393F;" class="message">
+    <h1>Versions Changelog</h1>
+    <h2>Version 1.12.x</h2>
   </div>
+</div>
 
-  <div class="downloads">
-    <a href="" download="PaulN07_custompack_1_12">Download latest</a>
-    <a href="" download="PaulN07_custompack_1_12">Version 1.14.x</a>
-    <a href="" download="PaulN07_custompack_1_12">Version 1.13.x</a>
-    <a href="" download="PaulN07_custompack_1_12">Version 1.12.x</a>
+<div style="padding-left:11%" class="main_message">
+  <div id="msgrght" class="message container">
+    <h1 style="padding-left: 20px;">Installation</h1>
+    <h2>steps</h2>
+    <p>step 1</p>
+    <p>step 2</p>
+    <p>step 3</p>
+    <p>step 4</p>
+    <p style="padding-left: 7px"><strong>Note: </strong> noted thing to say</p>
   </div>
-
-  <div style="padding-top:33px;width:50%;" class="main_message">
-    <div style="background-color: #36393F;" class="message">
-      <h1>Versions Changelog</h1>
-      <h2>Version 1.12.x</h2>
-    </div>
-  </div>
-
-  <div style="padding-left:11%" class="main_message">
-    <div id="msgrght" class="message container">
-      <h1 style="padding-left: 20px;">Installation</h1>
-      <h2>steps</h2>
-      <p>step 1</p>
-      <p>step 2</p>
-      <p>step 3</p>
-      <p>step 4</p>
-      <p style="padding-left: 7px"><strong>Note: </strong> noted thing to say</p>
-    </div>
-  </div>
-
-</body>
-
-</html>
+</div>
+{% endblock %}
