@@ -80,6 +80,21 @@
   width: 71%;
 }
 
+.comm_table_top {
+  color: #ffffff;
+  background-color: #202225;
+  border-top-left-radius: : 5px;
+  border-top-right-radius: 5px;
+  -moz-border-top-left-radius: 5px;
+  -moz-border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  border-collapse: collapse;
+  margin-bottom: 0px;
+  padding-left: 5px;
+  padding: 1px 6px;
+}
+
 .command_table {
   background-color: #2F3136;
   border-bottom-left-radius: 5px;
@@ -90,18 +105,6 @@
   -webkit-border-bottom-right-radius: 5px;
   border-collapse: collapse;
   width: 100%;
-}
-
-.topbar {
-  background-color: #7e0000;
-  margin-bottom: 0px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  padding: 0px 0px;
-  color: #ffffff;
-  padding-left: 5px;
-  padding-left: 5px;
-  padding: 4px 6px;
 }
 
 .command_table td {

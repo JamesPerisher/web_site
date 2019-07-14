@@ -14,10 +14,33 @@
 </head>
 
 <body>
-  <div class="content">{% block content %}{% endblock %}</div>
-  <div class="footer">
-    {% include 'footer.html' %}
-  </div>
+
+  <div class="id562">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/donate.css') }}" />
+    <div id="myForm">
+      <div class="overlay">
+        <div class="donate">
+          <h1>Donate</h1>
+          <table> <tr> <td class="dleft">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"> <input type="hidden" name="cmd" value="_s-xclick" /> <input type="hidden" name="hosted_button_id" value="P8F897U3VR32U" /> <input type="image"
+                    src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" /> </form> <img src="static/images/bitcoin.png"
+                  alt="bitcoin request qr code">
+              </td> <td class="dright">
+                <h2>For as little as $1USD you can help support development of projects</h2>
+                <p>important reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use this</p>
+              </td> </tr> </table>
+          <div class="dbottom">
+            <p class="bitc">bitcoin address: bc1qh3kmyz4tmet5j0h4gsalua9hr0lmxrpk6nmjv99rlw3279c20vkqsjwu6q</p> <span class="fake-link close" onclick="closeForm()" name="button">Cancel</span>
+            <p><br><br><br></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">{% block content %}{% endblock %}</div>
+    <div class="footer">
+      {% include 'footer.html' %}
+    </div>
 </body>
 
 </html>

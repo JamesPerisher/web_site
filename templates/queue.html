@@ -32,6 +32,12 @@
   // remove non-printable and other non-valid JSON chars
   data = data.replace(/[\u0000-\u0019]+/g, "");
   var newdata = JSON.parse(data.toString());
+
+  var i = 0;
+  for (i = 0; i < newdata.data.labels.length; i++) {
+    newdata.data.labels[i] = new Date(newdata.data.labels[i])
+  }
+
   var ctx = document.getElementById('myChart').getContext('2d');
   var myChart = new Chart(ctx, newdata)
 </script>

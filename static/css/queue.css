@@ -1,4 +1,19 @@
+.content h1 {
+  color: #7e0000;
+  font-size: 350%;
+  margin-top: 1%;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.content p {
+  margin: 0px 0px;
+}
+
 .canvas {
   width: 90%;
-  height: 60%
+  height: 500px;
+  margin: auto;
+  margin-bottom: 2%;
+  margin-top: 1%;
 }

@@ -1,37 +1,32 @@
 {
-  "type": "bar",
+  "type": "line",
   "data": {
-    "labels": "--labels--",
-    "datasets": [{
-      "label": "Queue",
-      "data": "--data--",
-      "type": "line",
-      "pointRadius": 0,
-      "fill": false,
-      "lineTension": 0,
-      "borderWidth": 2
-    }]
+    "labels": [],
+    "datasets": []
   },
   "options": {
+    "maintainAspectRatio": false,
+    "fill": false,
+    "responsive": true,
     "scales": {
       "xAxes": [{
         "type": "time",
-        "distribution": "series",
-        "ticks": {
-          "source": "data",
-          "autoSkip": true
+        "display": true,
+        "scaleLabel": {
+          "display": true,
+          "labelString": "Date"
         }
       }],
       "yAxes": [{
+        "ticks": {
+          "beginAtZero": true
+        },
+        "display": true,
         "scaleLabel": {
           "display": true,
-          "labelString": "number of people"
+          "labelString": "Page Views"
         }
       }]
-    },
-    "tooltips": {
-      "intersect": false,
-      "mode": "index"
     }
   }
 }
