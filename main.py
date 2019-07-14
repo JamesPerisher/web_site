@@ -23,6 +23,10 @@ app = Flask(__name__, template_folder='templates')
 def home():
     return render_template("home.html")
 
+@app.route('/help')
+def helpme():
+    return render_template("helpme.html")
+
 @app.route('/home')
 def home_redirect():
     return redirect("/", code=302)
@@ -30,6 +34,10 @@ def home_redirect():
 @app.route('/about')
 def about():
     return render_template("about.html")
+
+@app.route('/hidden_page')
+def hidden_page():
+    return redirect("help", code=302)
 
 @app.route('/res_pack')
 def res_pack():

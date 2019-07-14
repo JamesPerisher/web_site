@@ -17,7 +17,7 @@
   var data = "{{queue}}";
 </script>
 
-<script src="static/js/Chart.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/Chart.bundle.min.js') }}"></script>
 
 <script>
   data = data.replace(/\\n/g, "\\n")
