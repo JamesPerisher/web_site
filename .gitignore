@@ -14,6 +14,7 @@ yarn-error.log*
 .albertignore
 *.map
 
-# private
+# files
 start.bat
 page/test.html
+queue.db
