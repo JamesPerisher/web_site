@@ -13,7 +13,7 @@ body {
 }
 
 .content {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 125px);
 }
 
 .fake-link {
@@ -126,6 +126,19 @@ html {
   display: flex;
   align-items: center;
   margin-bottom: 0px;
+}
+
+.footer table {
+  width: 100%;
+  margin-left: 5%;
+  margin-right: 2%;
+  text-align: center;
+}
+
+.footer>* {
+  padding: 1px 0px;
+  border: 0px 0px;
+  margin: 0px 0px;
 }
 
 .footer p {
