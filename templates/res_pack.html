@@ -13,16 +13,23 @@
 </div>
 
 <div class="downloads">
-  <a href="" download="PaulN07_custompack_1_12">Download latest</a>
-  <a href="" download="PaulN07_custompack_1_12">Version 1.14.x</a>
-  <a href="" download="PaulN07_custompack_1_12">Version 1.13.x</a>
-  <a href="" download="PaulN07_custompack_1_12">Version 1.12.x</a>
+  <a href="{{download_data[0][1]}}" download="PaulN07_custompack_{{download_data[0][0]}}.zip">Download Latest</a>
+  {% for i in download_data %}
+  <a href="{{i[1]}}" download="PaulN07_custompack_{{i[0]}}.zip">Version {{i[0]}}</a>
+  {% endfor %}
 </div>
 
 <div style="padding-top:33px;width:50%;" class="main_message">
-  <div style="background-color: #36393F;" class="message">
+  <div style="background-color: #36393F;" class="message mess2">
     <h1>Versions Changelog</h1>
-    <h2>Version 1.12.x</h2>
+    {% for i in download_data %}
+    <h2>Version {{i[0]}}</h2>
+    <p>
+    {% for j in i[2] %}
+    {{j}}<br>
+    {% endfor %}
+    </p>
+    {% endfor %}
   </div>
 </div>
 

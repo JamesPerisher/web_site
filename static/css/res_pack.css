@@ -34,6 +34,17 @@
   padding-left: 10%;
 }
 
+.mess2 p {
+  padding: 0px 0px;
+  margin: 0px 0px;
+  border: 0px 0px;
+  padding-left: 5%;
+}
+
+.mess2 h2 {
+  margin-bottom: 10px;
+}
+
 .main_message {
   width: 30%;
   float: left;

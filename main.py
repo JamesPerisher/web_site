@@ -3,6 +3,7 @@ from flask import render_template, redirect
 import json, sqlite3
 import time, pytz
 import numpy as np
+import os
 
 def db_start():
     global connection, crsr
@@ -41,7 +42,13 @@ def hidden_page():
 
 @app.route('/res_pack')
 def res_pack():
-    return render_template("res_pack.html")
+    download_name = "download.zip"
+    dd = []
+    for i in os.listdir("data/res_pack")[-6::]:
+        with open("data/res_pack/%s/changelog"%i, "r") as f:
+            dd.append([i, "data/res_pack/%s/%s"%(i, download_name), f.read().split("\n")])
+            f.close()
+    return render_template("res_pack.html", download_data=dd[::-1])
 
 @app.route('/discord_bot')
 def discord_bot():
