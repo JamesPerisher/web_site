@@ -1,9 +1,11 @@
 from flask import Flask
-from flask import render_template, redirect
+from flask import render_template, redirect, request, session, jsonify, g
+from requests_oauthlib import OAuth2Session
 import json, sqlite3
 import time, pytz
 import numpy as np
 import os
+import sys
 
 def db_start():
     global connection, crsr
@@ -19,14 +21,29 @@ def db_close():
     connection.close()
 
 app = Flask(__name__, template_folder='templates')
+app.debug = True
+
+OAUTH2_CLIENT_ID = sys.argv[1]
+OAUTH2_CLIENT_SECRET = sys.argv[2]
+OAUTH2_REDIRECT_URI = "http://localhost:5000/authenticate_user"
+
+API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
+AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
+TOKEN_URL = API_BASE_URL + '/oauth2/token'
+
+app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
+
+
+if 'http://' in OAUTH2_REDIRECT_URI:
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", session_name=g.username)
 
 @app.route('/help')
 def helpme():
-    return render_template("helpme.html")
+    return render_template("helpme.html", session_name=g.username)
 
 @app.route('/home')
 def home_redirect():
@@ -34,11 +51,22 @@ def home_redirect():
 
 @app.route('/about')
 def about():
-    return render_template("about.html")
+    return render_template("about.html", session_name=g.username)
+
+@app.before_request
+def before_request_func():
+    discord = make_session(token=session.get('oauth2_token'))
+    user = discord.get(API_BASE_URL + '/users/@me').json()
+    g.username = "%s#%s" %(user["username"], user["discriminator"])
+
+@app.route('/shop')
+def shop():
+    return render_template("shop.html", session_name=g.username)
 
 @app.route('/hidden_page')
 def hidden_page():
     return redirect("help", code=302)
+
 
 @app.route('/res_pack')
 def res_pack():
@@ -48,7 +76,7 @@ def res_pack():
         with open("data/res_pack/%s/changelog"%i, "r") as f:
             dd.append([i, "data/res_pack/%s/%s"%(i, download_name), f.read().split("\n")])
             f.close()
-    return render_template("res_pack.html", download_data=dd[::-1])
+    return render_template("res_pack.html", download_data=dd[::-1], session_name=g.username)
 
 @app.route('/discord_bot')
 def discord_bot():
@@ -92,11 +120,11 @@ def discord_bot():
         help_res[i] = [[[e for e in v.strip().split("  ") if e != ""] for v in x.strip().split("\n")] for x in help_res[i].split(":")]
     help_res = help_res[0:-1]
 
-    return render_template("discord_bot.html", table_data=help_res)
+    return render_template("discord_bot.html", table_data=help_res, session_name=g.username)
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template("thank_you.html")
+    return render_template("thank_you.html", session_name=g.username)
 
 
 def que24(data):
@@ -179,7 +207,62 @@ def queue():
         count += 1
 
     chart_data = json.dumps(chart_data).replace("NaN", "\"NaN\"")
-    return render_template("queue.html", queue=chart_data)
+    return render_template("queue.html", queue=chart_data, session_name=g.username)
+
+
+# ====login=====
+
+def token_updater(token):
+    session['oauth2_token'] = token
+
+
+def make_session(token=None, state=None, scope=None):
+    return OAuth2Session(
+        client_id=OAUTH2_CLIENT_ID,
+        token=token,
+        state=state,
+        scope=scope,
+        redirect_uri=OAUTH2_REDIRECT_URI,
+        auto_refresh_kwargs={
+            'client_id': OAUTH2_CLIENT_ID,
+            'client_secret': OAUTH2_CLIENT_SECRET,
+        },
+        auto_refresh_url=TOKEN_URL,
+        token_updater=token_updater)
+
+
+@app.route('/login')
+def login():
+    scope = request.args.get(
+        'scope',
+        'identify email guilds')
+    discord = make_session(scope=scope.split(' '))
+    authorization_url, state = discord.authorization_url(AUTHORIZATION_BASE_URL)
+    session['oauth2_state'] = state
+    return redirect(authorization_url)
+
+
+@app.route('/authenticate_user')
+def authenticate_user():
+    if request.values.get('error'):
+        return request.values['error']
+    discord = make_session(state=session.get('oauth2_state'))
+    token = discord.fetch_token(
+        TOKEN_URL,
+        client_secret=OAUTH2_CLIENT_SECRET,
+        authorization_response=request.url)
+    session['oauth2_token'] = token
+    return redirect("/shop")
+
+
+@app.route('/me')
+def me():
+    discord = make_session(token=session.get('oauth2_token'))
+    user = discord.get(API_BASE_URL + '/users/@me').json()
+    guilds = discord.get(API_BASE_URL + '/users/@me/guilds').json()
+    return jsonify(user=user, guilds=guilds)
+
+
 
 
 

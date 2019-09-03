@@ -10,11 +10,28 @@
 
   <div class="topnav">
     {% if not newpages %}{% set newpages = dict() %}{% endif %}
-    {% set nav_list = dict({"home":"Home","about":"About","discord_bot":"Discord Bot","queue":"Queue","res_pack":"Resource Pack"}, **newpages) %}
+    {% set nav_list = dict({"home":"Home","about":"About","discord_bot":"Discord Bot","queue":"Queue","res_pack":"Resource Pack", "shop":"Shop"}, **newpages) %}
     {% for i in nav_list %}
     <a class="cat {% if active==i %}active{%endif %} {{i}}" href="{{ url_for(i) }}">{{nav_list[i]}}</a>
     {% endfor %}
-    <a class="right" href="https://discord.gg/2wj94TP" target="_blank">Join my discord</a>
+
+    {% if session_name %}
+    <div class="dropdown">
+      <button class="dropbtn right">{{session_name}}</button>
+      <div class="dropdown-content">
+        <a href="https://discord.gg/2wj94TP" target="_blank">Join the discord</a>
+        <a href="/me">My profile</a>
+      </div>
+    </div>
+    {% else %}
+    <div class="dropdown">
+      <button class="dropbtn right">Login with discord</button>
+      <div class="dropdown-content">
+        <a href="https://discord.gg/2wj94TP" target="_blank">Join the discord</a>
+        <a href="/login">Login</a>
+      </div>
+    </div>
+    {% endif %}
   </div>
   {% endblock %}
 </head>
@@ -26,14 +43,19 @@
       <div class="overlay">
         <div class="donate">
           <h1>Donate</h1>
-          <table> <tr> <td class="dleft">
+          <table>
+            <tr>
+              <td class="dleft">
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top"> <input type="hidden" name="cmd" value="_s-xclick" /> <input type="hidden" name="hosted_button_id" value="P8F897U3VR32U" /> <input type="image"
                     src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" /> </form> <img src="static/images/bitcoin.png"
                   alt="bitcoin request qr code">
-              </td> <td class="dright">
+              </td>
+              <td class="dright">
                 <h2>For as little as $1USD you can help support development of projects</h2>
                 <p>important reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use thisimportant reason to use this</p>
-              </td> </tr> </table>
+              </td>
+            </tr>
+          </table>
           <div class="dbottom">
             <p class="bitc">bitcoin address: bc1qh3kmyz4tmet5j0h4gsalua9hr0lmxrpk6nmjv99rlw3279c20vkqsjwu6q</p> <span class="fake-link close" onclick="closeForm()" name="button">Cancel</span>
             <p><br><br><br></p>
@@ -48,11 +70,14 @@
         <tr>
           <td>
             <p><a href="#terms">Terms</a></p>
-          </td><td>
-            <p><a class="fake-link"onclick="openForm()">Donate</a></p>
-          </td><td>
-            <p>Conact:   <a href="#conact">examplemail@email.com</a></p>
-          </td><td>
+          </td>
+          <td>
+            <p><a class="fake-link" onclick="openForm()">Donate</a></p>
+          </td>
+          <td>
+            <p>Conact: <a href="#conact">examplemail@email.com</a></p>
+          </td>
+          <td>
             <p>@PaulN07#2596</p>
           </td>
           <td>

@@ -1,0 +1,12 @@
+{% extends "template.html" %}
+{% block title %}Shop{% endblock %}
+{% set active='shop' %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/shop.css') }}">
+{% endblock %}
+
+{% block content %}
+<p>none</p>
+{% endblock %}

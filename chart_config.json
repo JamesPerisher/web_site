@@ -14,17 +14,17 @@
         "display": true,
         "scaleLabel": {
           "display": true,
-          "labelString": "Date"
+          "labelString": "Time"
         }
       }],
       "yAxes": [{
         "ticks": {
-          "beginAtZero": true
+          "beginAtZero": false
         },
         "display": true,
         "scaleLabel": {
           "display": true,
-          "labelString": "Page Views"
+          "labelString": "People"
         }
       }]
     }
