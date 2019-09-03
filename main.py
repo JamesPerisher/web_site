@@ -53,12 +53,6 @@ def home_redirect():
 def about():
     return render_template("about.html", session_name=g.username)
 
-@app.before_request
-def before_request_func():
-    discord = make_session(token=session.get('oauth2_token'))
-    user = discord.get(API_BASE_URL + '/users/@me').json()
-    g.username = "%s#%s" %(user["username"], user["discriminator"])
-
 @app.route('/shop')
 def shop():
     return render_template("shop.html", session_name=g.username)
@@ -211,6 +205,18 @@ def queue():
 
 
 # ====login=====
+
+@app.before_request
+def before_request_func():
+    discord = make_session(token=session.get('oauth2_token'))
+    user = discord.get(API_BASE_URL + '/users/@me').json()
+    try:
+        user["code"]
+    except KeyError:
+        g.username = "%s#%s" %(user["username"], user["discriminator"])
+    else:
+        g.username = None
+
 
 def token_updater(token):
     session['oauth2_token'] = token
