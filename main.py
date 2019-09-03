@@ -247,6 +247,11 @@ def login():
     session['oauth2_state'] = state
     return redirect(authorization_url)
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect("/")
+
 
 @app.route('/authenticate_user')
 def authenticate_user():
