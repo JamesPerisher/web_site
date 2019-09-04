@@ -53,9 +53,27 @@ def home_redirect():
 def about():
     return render_template("about.html", session_name=g.username)
 
+
+class sale_item():
+    def __init__(self, title="", description="", price=1000, coins=10, image="static/images/shop_images/error.png", iscoin=False):
+        self.title = title
+        self.description = description
+        self.image = image
+        self.price  = price
+        self.coins = coins
+        self.image = image
+
+        if iscoin:
+            self.title = "%s%s" %('{:,}'.format(self.coins), self.title)
+            self.description = self.description.replace("{amt}", "$%s" %(self.price / self.coins))
+
+
 @app.route('/shop')
 def shop():
-    return render_template("shop.html", session_name=g.username)
+    coins_1 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50, 20000, "static/images/shop_images/error.png", True)
+    coins_2 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True)
+    coins_3 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True)
+    return render_template("shop.html", shopItems = [coins_1, coins_2, coins_3], session_name=g.username)
 
 @app.route('/hidden_page')
 def hidden_page():
@@ -241,7 +259,7 @@ def make_session(token=None, state=None, scope=None):
 def login():
     scope = request.args.get(
         'scope',
-        'identify email guilds')
+        'identify email')
     discord = make_session(scope=scope.split(' '))
     authorization_url, state = discord.authorization_url(AUTHORIZATION_BASE_URL)
     session['oauth2_state'] = state
@@ -270,8 +288,8 @@ def authenticate_user():
 def me():
     discord = make_session(token=session.get('oauth2_token'))
     user = discord.get(API_BASE_URL + '/users/@me').json()
-    guilds = discord.get(API_BASE_URL + '/users/@me/guilds').json()
-    return jsonify(user=user, guilds=guilds)
+    return render_template("profile_page.html", session_name=g.username)
+    return jsonify(user=user)
 
 
 

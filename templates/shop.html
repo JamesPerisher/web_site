@@ -8,5 +8,27 @@
 {% endblock %}
 
 {% block content %}
-<p>none</p>
+
+{% for i in shopItems %}
+<table class="shopItem">
+  <tr>
+    <th><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
+    <th>
+      <div class="texts">
+        <h2>{{i.title}}</h2>
+        <p>{{i.description}}</p>
+      </div>
+    </th>
+    <th>
+      <div class="price">
+        <h2>${{i.price}}</h2>
+        <div class="buttons">
+          <button type="button" name="button">Buy Now</button>
+          <button type="button" name="button">Add to cart</button>
+        </div>
+      </div>
+    </th>
+  </tr>
+</table>
+{% endfor %}
 {% endblock %}
