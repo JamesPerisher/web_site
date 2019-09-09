@@ -9,7 +9,7 @@ import sys
 
 def db_start():
     global connection, crsr
-    connection = sqlite3.connect("queue.db")
+    connection = sqlite3.connect("database.db")
     crsr = connection.cursor()
 
 def db_close():
@@ -19,6 +19,27 @@ def db_close():
     except:
         pass
     connection.close()
+
+def ifRecord(user_id):
+    global connection, crsr
+    sql_command = "SELECT COUNT(1)\n    FROM balances\n    WHERE user_id = \"%s\";"%user_id
+    crsr.execute(sql_command)
+    if crsr.fetchall()[0][0] == 0:
+        return False
+    else:
+        return True
+
+
+def balance(user_id):
+    if ifRecord(user_id):
+        sql_command = "SELECT amount FROM balances WHERE user_id = %s" %user_id
+        crsr.execute(sql_command)
+        return crsr.fetchall()[0][0]
+    else:
+        sql_command = "INSERT INTO balances VALUES (NULL, %s, 0)" %user_id
+        crsr.execute(sql_command)
+        print("Added %s to coins db" %user_id)
+        return 0
 
 app = Flask(__name__, template_folder='templates')
 app.debug = True
@@ -70,10 +91,20 @@ class sale_item():
 
 @app.route('/shop')
 def shop():
+    global connection, crsr
     coins_1 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50, 20000, "static/images/shop_images/error.png", True)
     coins_2 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True)
     coins_3 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True)
-    return render_template("shop.html", shopItems = [coins_1, coins_2, coins_3], session_name=g.username)
+
+    try:
+        db_start()
+        bal = balance(int(g.id if not g.id == None else None))
+        db_close()
+    except Exception as e:
+        print(e)
+        bal = 0
+
+    return render_template("shop.html", shopItems = [coins_1, coins_2, coins_3], session_name=g.username, bal= bal)
 
 @app.route('/hidden_page')
 def hidden_page():
@@ -140,6 +171,8 @@ def thank_you():
 
 
 def que24(data):
+    if len(data) == 0:
+        return None
     x  = [] # time
     y0 = [] # queue
     y1 = [] # online
@@ -192,7 +225,7 @@ def queue():
     global connection, crsr
 
     db_start()
-    sql_command = "SELECT * FROM que_history WHERE time > %s" %int(1563106276-(86400*20))# %int(time.time()-86400)
+    sql_command = "SELECT * FROM que_history WHERE time > %s" %int(time.time()-86400)
     crsr.execute(sql_command)
 
     queue_data = crsr.fetchall() # id, que, online time  [(1, -2, 0, 1559413778), (2, 987, 1612, 1559414010)]
@@ -200,6 +233,9 @@ def queue():
 
     data = que24(queue_data)
     chart_data = json.load(open("chart_config.json"))
+
+    if data == None:
+        data = {"time":None}
 
     chart_data["data"]["labels"] = data["time"]
     del data["time"]
@@ -232,8 +268,10 @@ def before_request_func():
         user["code"]
     except KeyError:
         g.username = "%s#%s" %(user["username"], user["discriminator"])
+        g.id = user["id"]
     else:
         g.username = None
+        g.id = None
 
 
 def token_updater(token):
@@ -286,14 +324,15 @@ def authenticate_user():
 
 @app.route('/me')
 def me():
-    discord = make_session(token=session.get('oauth2_token'))
-    user = discord.get(API_BASE_URL + '/users/@me').json()
-    return render_template("profile_page.html", session_name=g.username)
-    return jsonify(user=user)
+    try:
+        discord = make_session(token=session.get('oauth2_token'))
+        user = discord.get(API_BASE_URL + '/users/@me').json()
 
-
-
-
+        image = "https://cdn.discordapp.com/avatars/%s/%s.png?size=1024" %(user["id"], user["avatar"])
+    except KeyError:
+        return redirect("/login")
+    else:
+        return render_template("profile_page.html", img = image, user=user, session_name=g.username)
 
 
 if __name__ == '__main__':

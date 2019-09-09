@@ -13,9 +13,10 @@ yarn-debug.log*
 yarn-error.log*
 .albertignore
 *.map
+error-old.png
 
 # files
 start.bat
 page/test.html
-queue.db
+database.db
 test.py

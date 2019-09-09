@@ -1,6 +1,6 @@
 .shopItem {
-  margin-left: 10%;
-  width: 60%;
+  margin-left: 16.66%;
+  width: 83.33%;
   background-color: #inherit;
   overflow: auto;
   position: relative;
@@ -59,4 +59,17 @@
 
 .shopItem .price .buttons button:hover {
   background-color: #7e0000;
+}
+
+.itemList {
+  float: left;
+  width: 70%;
+}
+
+.sidebar {
+  float: right;
+  width: 20%;
+  color: #ffffff;
+  background-color: #2F3136;
+  border-bottom-left-radius: 5px;
 }

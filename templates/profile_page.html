@@ -1,0 +1,14 @@
+{% extends "template.html" %}
+{% block title %}Me{% endblock %}
+{% set newpages = {"me":"My Profile"} %}
+{% set active='me' %}
+
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+<img src="{{img}}" alt="">
+<p>{{user}}</p>
+{% endblock %}
