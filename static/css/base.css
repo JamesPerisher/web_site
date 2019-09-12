@@ -12,6 +12,10 @@ body {
   margin-bottom: 0px;
 }
 
+button:focus {
+  outline: 0;
+}
+
 .content {
   min-height: calc(100vh - 125px);
 }

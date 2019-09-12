@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, redirect, request, session, jsonify, g, url_for, make_response
 from requests_oauthlib import OAuth2Session
+from decimal import *
 import json, sqlite3
 import time, pytz
 import numpy as np
@@ -9,13 +10,13 @@ import sys
 import random
 
 shopItems = {}
-
+print(getcontext())
 class sale_item():
     def __init__(self, title="", description="", price=1000, coins=10, image="static/images/shop_images/error.png", iscoin=False):
         self.title = title
         self.description = description
         self.image = image
-        self.price  = price
+        self.price  = Decimal(price)
         self.coins = coins
         self.image = image
         self.id = -1
@@ -30,9 +31,9 @@ class sale_item():
         return self
 
 
-sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50,   20000, "static/images/shop_images/error.png", True).add(shopItems)
-sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True).add(shopItems)
-sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True).add(shopItems)
+sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("2.50"),   20000, "static/images/shop_images/error.png", True).add(shopItems)
+sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("12.69"), 100000, "static/images/shop_images/error.png", True).add(shopItems)
+sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("20.00"), 200000, "static/images/shop_images/error.png", True).add(shopItems)
 
 
 
