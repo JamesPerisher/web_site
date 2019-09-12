@@ -149,11 +149,25 @@ def cart():
         print(e)
         bal = 0
 
-    coins_1 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50, 20000, "static/images/shop_images/error.png", True)
-    coins_2 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True)
-    coins_3 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True)
+    try:
+        local_cookie = list(request.cookies.get("cart").encode())
+    except AttributeError:
+        local_cookie = []
 
-    return render_template("cart.html", cartItems = [coins_1, coins_2, coins_3], session_name=g.username, bal=bal)
+    try:
+        sp = []
+        t = 0
+        for i in local_cookie:
+            x = shopItems[int(i)]
+            t +=x.price
+            sp.append(x)
+
+        resp = make_response(render_template("cart.html", cartItems = sp, session_name=g.username, bal=bal, totalPrice=t))
+    except KeyError or ValueError as e:
+        resp.set_cookie("cart", bytes([]))
+        print("cart error")
+
+    return resp
 
 
 @app.route('/hidden_page')
