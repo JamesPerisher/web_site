@@ -122,6 +122,28 @@ def add_product_to_cart():
         print(e)
     return resp
 
+@app.route('/remove', methods=['POST'])
+def remove_product_from_cart():
+    try:
+        local_cookie = list(request.cookies.get("cart").encode())
+    except AttributeError:
+        local_cookie = []
+    print(local_cookie, end=" --> ")
+    resp = make_response(redirect(url_for('.cart')))
+    try:
+        id = int(request.form["id"])
+        shopItems[id]
+
+        local_cookie.remove(id)
+
+        print(local_cookie)
+
+        resp.set_cookie("cart", bytes(local_cookie))
+    except KeyError or ValueError as e:
+        print(e)
+    return resp
+
+
 @app.route('/shop')
 def shop():
     global connection, crsr

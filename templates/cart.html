@@ -11,26 +11,54 @@
 
 {% block content %}
 
+<div class="sidebar">
+  <table>
+    <tr>
+      <th>{{ session_name if not session_name == None else "Not logged in" }}</th>
+    </tr>
+    <tr>
+      <th>Balance: </th>
+      <th>{{ bal if not session_name == None else 0 }} coins</th>
+    </tr>
+  </table>
+</div>
+
+{% if cartItems|length  == 0 %}
+
+<script>
+  if (confirm("Your cart is empty\nGo to store.")) {
+    window.location.href = "/shop";
+  } else {
+    history.go(-1);
+  }
+
+</script>
+
+{% else %}
+
 <div class="itemList">
   {% for i in cartItems %}
   <table class="shopItem">
-    <tr>
-      <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
-      <th>
-        <div class="texts">
-          <h2>{{i.title}}</h2>
-          <p>{{i.description}}</p>
-        </div>
-      </th>
-      <th>
-        <div class="price">
-          <h2>${{i.price}}</h2>
-          <div class="buttons">
-            <button class="rmb" type="button" name="button">Remove from cart</button>
+    <form action="remove" method="post">
+      <input type="hidden" name="id" value="{{i.id}}">
+      <tr>
+        <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
+        <th>
+          <div class="texts">
+            <h2>{{i.title}}</h2>
+            <p>{{i.description}}</p>
           </div>
-        </div>
-      </th>
-    </tr>
+        </th>
+        <th>
+          <div class="price">
+            <h2>${{i.price}}</h2>
+            <div class="buttons">
+              <button class="rmb" type="submit" name="button">Remove from cart</button>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </form>
   </table>
   {% endfor %}
   <table class="shopItem">
@@ -58,16 +86,6 @@
 
 </div>
 
-<div class="sidebar">
-  <table>
-    <tr>
-      <th>{{ session_name if not session_name == None else "Not logged in" }}</th>
-    </tr>
-    <tr>
-      <th>Balance: </th>
-      <th>{{ bal if not session_name == None else 0 }} coins</th>
-    </tr>
-  </table>
-</div>
+{% endif %}
 
 {% endblock %}
