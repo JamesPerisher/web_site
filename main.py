@@ -1,11 +1,40 @@
 from flask import Flask
-from flask import render_template, redirect, request, session, jsonify, g
+from flask import render_template, redirect, request, session, jsonify, g, url_for, make_response
 from requests_oauthlib import OAuth2Session
 import json, sqlite3
 import time, pytz
 import numpy as np
 import os
 import sys
+import random
+
+shopItems = {}
+
+class sale_item():
+    def __init__(self, title="", description="", price=1000, coins=10, image="static/images/shop_images/error.png", iscoin=False):
+        self.title = title
+        self.description = description
+        self.image = image
+        self.price  = price
+        self.coins = coins
+        self.image = image
+        self.id = -1
+
+        if iscoin:
+            self.title = "%s%s" %('{:,}'.format(self.coins), self.title)
+            self.description = self.description.replace("{amt}", "$%s" %(self.price / self.coins))
+
+    def add(self, ls):
+        self.id = len(ls)+1
+        ls[self.id] = self
+        return self
+
+
+sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50,   20000, "static/images/shop_images/error.png", True).add(shopItems)
+sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True).add(shopItems)
+sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True).add(shopItems)
+
+
 
 def db_start():
     global connection, crsr
@@ -54,7 +83,6 @@ TOKEN_URL = API_BASE_URL + '/oauth2/token'
 
 app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
 
-
 if 'http://' in OAUTH2_REDIRECT_URI:
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
 
@@ -74,27 +102,29 @@ def home_redirect():
 def about():
     return render_template("about.html", session_name=g.username)
 
+@app.route('/add', methods=['POST'])
+def add_product_to_cart():
+    try:
+        local_cookie = list(request.cookies.get("cart").encode())
+    except AttributeError:
+        local_cookie = []
+    print(local_cookie, end=" --> ")
+    resp = make_response(redirect(url_for('.shop')))
+    try:
+        id = int(request.form["id"])
+        shopItems[id]
 
-class sale_item():
-    def __init__(self, title="", description="", price=1000, coins=10, image="static/images/shop_images/error.png", iscoin=False):
-        self.title = title
-        self.description = description
-        self.image = image
-        self.price  = price
-        self.coins = coins
-        self.image = image
+        local_cookie.append(id)
+        print(local_cookie)
 
-        if iscoin:
-            self.title = "%s%s" %('{:,}'.format(self.coins), self.title)
-            self.description = self.description.replace("{amt}", "$%s" %(self.price / self.coins))
-
+        resp.set_cookie("cart", bytes(local_cookie))
+    except KeyError or ValueError as e:
+        print(e)
+    return resp
 
 @app.route('/shop')
 def shop():
     global connection, crsr
-    coins_1 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50, 20000, "static/images/shop_images/error.png", True)
-    coins_2 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True)
-    coins_3 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True)
 
     try:
         db_start()
@@ -104,7 +134,27 @@ def shop():
         print(e)
         bal = 0
 
-    return render_template("shop.html", shopItems = [coins_1, coins_2, coins_3], session_name=g.username, bal= bal)
+    return render_template("shop.html", shopItems = shopItems, session_name=g.username, bal= bal)
+
+@app.route('/cart')
+def cart():
+    if g.username == None:
+        return redirect("/login", code=302)
+
+    try:
+        db_start()
+        bal = balance(int(g.id if not g.id == None else None))
+        db_close()
+    except Exception as e:
+        print(e)
+        bal = 0
+
+    coins_1 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 2.50, 20000, "static/images/shop_images/error.png", True)
+    coins_2 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 12.69, 100000, "static/images/shop_images/error.png", True)
+    coins_3 = sale_item(" Coins", "Coin purchase at about {amt} per coin", 20.00, 200000, "static/images/shop_images/error.png", True)
+
+    return render_template("cart.html", cartItems = [coins_1, coins_2, coins_3], session_name=g.username, bal=bal)
+
 
 @app.route('/hidden_page')
 def hidden_page():

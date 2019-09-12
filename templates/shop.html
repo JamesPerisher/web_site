@@ -11,27 +11,32 @@
 
 <div class="itemList">
   {% for i in shopItems %}
+  {% set i = shopItems[i] %}
   <table class="shopItem">
-    <tr>
-      <th><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
-      <th>
-        <div class="texts">
-          <h2>{{i.title}}</h2>
-          <p>{{i.description}}</p>
-        </div>
-      </th>
-      <th>
-        <div class="price">
-          <h2>${{i.price}}</h2>
-          <div class="buttons">
-            <button type="button" name="button">Buy Now</button>
-            <button type="button" name="button">Add to cart</button>
+    <form action="/add" method="post" name="shop">
+      <input type="hidden" name="id" value="{{i.id}}">
+      <tr>
+        <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
+        <th>
+          <div class="texts">
+            <h2>{{i.title}}</h2>
+            <p>{{i.description}}</p>
           </div>
-        </div>
-      </th>
-    </tr>
+        </th>
+        <th>
+          <div class="price">
+            <h2>${{i.price}}</h2>
+            <div class="buttons">
+              <button type="button" name="button">Buy Now</button>
+              <button type="submit" name="button">Add to cart</button>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </form>
   </table>
   {% endfor %}
+
 </div>
 
 <div class="sidebar">

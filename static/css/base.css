@@ -44,6 +44,15 @@ html {
   overflow: hidden;
 }
 
+.cart_link {
+  height: 30px;
+  width: 30px;
+  float: right;
+  margin: auto;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
 .topnav .right {
   float: right;
   color: #7e0000;

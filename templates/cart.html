@@ -1,0 +1,73 @@
+{% extends "template.html" %}
+{% block title %}Cart{% endblock %}
+{% set newpages = {"cart":"Item Cart"} %}
+{% set active='cart' %}
+
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/shop.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="itemList">
+  {% for i in cartItems %}
+  <table class="shopItem">
+    <tr>
+      <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
+      <th>
+        <div class="texts">
+          <h2>{{i.title}}</h2>
+          <p>{{i.description}}</p>
+        </div>
+      </th>
+      <th>
+        <div class="price">
+          <h2>${{i.price}}</h2>
+          <div class="buttons">
+            <button class="rmb" type="button" name="button">Remove from cart</button>
+          </div>
+        </div>
+      </th>
+    </tr>
+  </table>
+  {% endfor %}
+  <table class="shopItem">
+    <tr>
+      <th>
+        <div class="texts">
+          <h2>Total price</h2>
+        </div>
+      </th>
+      <th style="width: 5%"></th>
+      <th style="width: 20%;">
+        <div class="price">
+          <h2>${{totalPrice}}</h2>
+        </div>
+      </th>
+      <th style="width: 33%;">
+        <div class="price">
+          <div class="buttons">
+            <button class="rmb" type="button" name="button">Go to checkout</button>
+          </div>
+        </div>
+      </th>
+    </tr>
+  </table>
+
+</div>
+
+<div class="sidebar">
+  <table>
+    <tr>
+      <th>{{ session_name if not session_name == None else "Not logged in" }}</th>
+    </tr>
+    <tr>
+      <th>Balance: </th>
+      <th>{{ bal if not session_name == None else 0 }} coins</th>
+    </tr>
+  </table>
+</div>
+
+{% endblock %}

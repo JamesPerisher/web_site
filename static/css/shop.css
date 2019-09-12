@@ -12,6 +12,10 @@
   margin: 1% 1%;
 }
 
+.shopItem th {
+  width: 33%;
+}
+
 .vc {
   margin: 0;
   position: absolute;
@@ -55,6 +59,12 @@
   margin-right: 30px;
   height: auto;
   border-radius: 20px;
+}
+
+.shopItem .price .buttons .rmb {
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 .shopItem .price .buttons button:hover {
