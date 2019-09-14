@@ -16,6 +16,16 @@ button:focus {
   outline: 0;
 }
 
+.intextlink {
+  color: #7e0000;
+  text-decoration: none;
+}
+
+.intextlink:hover {
+  color: #000000;
+  text-decoration: none;
+}
+
 .content {
   min-height: calc(100vh - 125px);
 }

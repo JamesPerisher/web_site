@@ -10,8 +10,17 @@
 
 
 {% block content %}
+{% set reason = request.args.get('reason') %}
 <div class="thcontent">
-  <h1>Thank you for donating.</h1>
-  <p>You donation is apreciated reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasons reasonss</p>
+  {% if reason=="donate" %}
+  <h1>Thank you for donating!</h1>
+  <p>Your donation is appreciated and will help support the future of this page and my projects.</p>
+  {% elif reason=="purchase" %}
+  <h1>Thank you for purchasing items!</h1>
+  <p>Your transaction was successful.</p>
+  {% else %}
+  <h1>There seems to be an error with this page!</h1>
+  <p>Request argument was not provided contact @PaulN07#2596 via discord to report a bug.</p>
+  {% endif %}
 </div>
 {% endblock %}

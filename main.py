@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import render_template, redirect, request, session, jsonify, g, url_for, make_response
 from requests_oauthlib import OAuth2Session
+from werkzeug.datastructures import ImmutableOrderedMultiDict
 from decimal import *
 import json, sqlite3
 import time, pytz
@@ -8,6 +9,7 @@ import numpy as np
 import os
 import sys
 import random
+import requests
 
 shopItems = {}
 print(getcontext())
@@ -74,13 +76,18 @@ def balance(user_id):
 app = Flask(__name__, template_folder='templates')
 app.debug = True
 
+root_url = "124.179.3.222:5000"
+
 OAUTH2_CLIENT_ID = sys.argv[1]
 OAUTH2_CLIENT_SECRET = sys.argv[2]
-OAUTH2_REDIRECT_URI = "http://localhost:5000/authenticate_user"
+OAUTH2_REDIRECT_URI = "http://%s/authenticate_user"%root_url
 
 API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
 AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
 TOKEN_URL = API_BASE_URL + '/oauth2/token'
+
+PAYPAL_ID = sys.argv[2]
+PAYPAL_SECRET = sys.argv[3]
 
 app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
 
@@ -89,19 +96,15 @@ if 'http://' in OAUTH2_REDIRECT_URI:
 
 @app.route("/")
 def home():
-    return render_template("home.html", session_name=g.username)
+    return render_template("home.html")
 
 @app.route('/help')
 def helpme():
-    return render_template("helpme.html", session_name=g.username)
+    return render_template("helpme.html")
 
 @app.route('/home')
 def home_redirect():
     return redirect("/", code=302)
-
-@app.route('/about')
-def about():
-    return render_template("about.html", session_name=g.username)
 
 @app.route('/add', methods=['POST'])
 def add_product_to_cart():
@@ -157,7 +160,7 @@ def shop():
         print(e)
         bal = 0
 
-    return render_template("shop.html", shopItems = shopItems, session_name=g.username, bal= bal)
+    return render_template("shop.html", shopItems = shopItems, bal= bal)
 
 @app.route('/cart')
 def cart():
@@ -185,12 +188,65 @@ def cart():
             t +=x.price
             sp.append(x)
 
-        resp = make_response(render_template("cart.html", cartItems = sp, session_name=g.username, bal=bal, totalPrice=t))
+        resp = make_response(render_template("cart.html", cartItems = sp, bal=bal, totalPrice=t))
     except KeyError or ValueError as e:
         resp.set_cookie("cart", bytes([]))
         print("cart error")
 
     return resp
+
+
+
+
+
+@app.route('/paypal/ipn/',methods=['POST'])
+def paypal_ipn():
+    try:
+        arg = ''
+        request.parameter_storage_class = ImmutableOrderedMultiDict
+        values = request.form
+        for x, y in values.iteritems():
+            arg += "&{x}={y}".format(x=x,y=y)
+
+        validate_url = 'https://www.sandbox.paypal.com' \
+                       '/cgi-bin/webscr?cmd=_notify-validate{arg}' \
+                       .format(arg=arg)
+        r = requests.get(validate_url)
+        if r.text == 'VERIFIED':
+            try:
+                payer_email =  thwart(request.form.get('payer_email'))
+                unix = int(time.time())
+                payment_date = thwart(request.form.get('payment_date'))
+                username = thwart(request.form.get('custom'))
+                last_name = thwart(request.form.get('last_name'))
+                payment_gross = thwart(request.form.get('payment_gross'))
+                payment_fee = thwart(request.form.get('payment_fee'))
+                payment_net = float(payment_gross) - float(payment_fee)
+                payment_status = thwart(request.form.get('payment_status'))
+                txn_id = thwart(request.form.get('txn_id'))
+            except Exception as e:
+                with open('/ipnout.txt','a') as f:
+                    data = 'ERROR WITH IPN DATA\n'+str(values)+'\n'
+                    f.write(data)
+
+            with open('/ipnout.txt','a') as f:
+                data = 'SUCCESS\n'+str(values)+'\n'
+                f.write(data)
+
+            print("Update coins for:", unix, payment_date, username, last_name, payment_gross, payment_fee, payment_net, payment_status, txn_id)
+
+
+        else:
+            with open('/tmp/ipnout.txt','a') as f:
+                data = 'FAILURE\n%s\n'%str(values)
+                f.write(data)
+
+        return r.text
+    except Exception as e:
+        return str(e)
+
+
+
 
 
 @app.route('/hidden_page')
@@ -206,7 +262,7 @@ def res_pack():
         with open("data/res_pack/%s/changelog"%i, "r") as f:
             dd.append([i, "data/res_pack/%s/%s"%(i, download_name), f.read().split("\n")])
             f.close()
-    return render_template("res_pack.html", download_data=dd[::-1], session_name=g.username)
+    return render_template("res_pack.html", download_data=dd[::-1])
 
 @app.route('/discord_bot')
 def discord_bot():
@@ -250,11 +306,11 @@ def discord_bot():
         help_res[i] = [[[e for e in v.strip().split("  ") if e != ""] for v in x.strip().split("\n")] for x in help_res[i].split(":")]
     help_res = help_res[0:-1]
 
-    return render_template("discord_bot.html", table_data=help_res, session_name=g.username)
+    return render_template("discord_bot.html", table_data=help_res)
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template("thank_you.html", session_name=g.username)
+    return render_template("thank_you.html")
 
 
 def que24(data):
@@ -342,13 +398,17 @@ def queue():
         count += 1
 
     chart_data = json.dumps(chart_data).replace("NaN", "\"NaN\"")
-    return render_template("queue.html", queue=chart_data, session_name=g.username)
+    return render_template("queue.html", queue=chart_data)
 
 
 # ====login=====
 
 @app.before_request
 def before_request_func():
+    if request.url.startswith('https://'):
+        url = request.url.replace('https://', 'http://', 1)
+        return redirect(url, code=301)
+
     discord = make_session(token=session.get('oauth2_token'))
     user = discord.get(API_BASE_URL + '/users/@me').json()
     try:
@@ -419,8 +479,9 @@ def me():
     except KeyError:
         return redirect("/login")
     else:
-        return render_template("profile_page.html", img = image, user=user, session_name=g.username)
+        return render_template("profile_page.html", img = image, user=user)
+
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host= '0.0.0.0')

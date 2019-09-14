@@ -10,15 +10,15 @@
 
   <div class="topnav">
     {% if not newpages %}{% set newpages = dict() %}{% endif %}
-    {% set nav_list = dict({"home":"Home","about":"About","discord_bot":"Discord Bot","queue":"Queue","res_pack":"Resource Pack", "shop":"Shop"}, **newpages) %}
+    {% set nav_list = dict({"home":"Home","discord_bot":"Discord Bot","queue":"Queue","res_pack":"Resource Pack", "shop":"Shop"}, **newpages) %}
     {% for i in nav_list %}
     <a class="cat {% if active==i %}active{%endif %} {{i}}" href="{{ url_for(i) }}">{{nav_list[i]}}</a>
     {% endfor %}
 
 
-    {% if session_name %}
+    {% if g.username %}
     <div class="dropdown">
-      <button class="dropbtn right">{{session_name}}</button>
+      <button class="dropbtn right">{{g.username}}</button>
       <div class="dropdown-content">
         <a href="https://discord.gg/2wj94TP" target="_blank">Join the discord</a>
         <a href="/me">My profile</a>
@@ -76,6 +76,9 @@
           </td>
           <td>
             <p><a class="fake-link" onclick="openForm()">Donate</a></p>
+          </td>
+          <td>
+            <a style="color: #202225" href="/help">____</a>
           </td>
           <td>
             <p>Conact: <a href="#conact">examplemail@email.com</a></p>

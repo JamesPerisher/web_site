@@ -77,7 +77,29 @@
       <th style="width: 33%;">
         <div class="price">
           <div class="buttons">
-            <button class="rmb" type="button" name="button">Go to checkout</button>
+
+
+            <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="NBP7ZB7W8YX9Q">
+              <input type="hidden" name="lc" value="AU">
+              <input type="hidden" name="item_name" value="checkoutbutton">
+              <input type="hidden" name="amount" value="{{totalPrice}}">
+              <input type="hidden" name="currency_code" value="USD">
+              <input type="hidden" name="button_subtype" value="services">
+              <input type="hidden" name="no_note" value="1">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="hidden" name="rm" value="1">
+              <input type="hidden" name="return" value="https://{{request.headers['Host']+url_for("thank_you")+"?reason=purchase"}}">
+              <input type="hidden" name="cancel_return" value="https://{{request.headers['Host']+url_for("home")}}">
+              <input type="hidden" name="bn" value="PP-BuyNowBF:btn_buynowCC_LG.gif:NonHosted">
+              <input type="hidden" name="custom" value="{{g.id}}">
+              <input type="hidden" name="notify_url" value="https://{{request.headers['Host']}}/paypal/ipn">
+              <button class="rmb" type="submit" name="button">Go to checkout</button>
+            </form>
+
+
+
           </div>
         </div>
       </th>
