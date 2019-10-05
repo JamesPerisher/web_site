@@ -1,0 +1,36 @@
+.info {
+  margin-left: 5%;
+}
+
+img {
+  margin-left: 0px;
+  border-radius: 5%;
+}
+
+.infotable {
+  width: 100%;
+}
+
+.infotable .img {
+  width: 18%;
+  height: auto;
+}
+
+h1, h2, p {
+  color: #ffffff;
+}
+
+h1 {
+  color: #7e0000;
+}
+
+td {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+#rank {
+  font-size: 500%;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}

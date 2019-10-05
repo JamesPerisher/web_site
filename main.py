@@ -76,7 +76,7 @@ def balance(user_id):
 app = Flask(__name__, template_folder='templates')
 app.debug = True
 
-root_url = "124.179.3.222:5000"
+root_url = "localhost:5000"
 
 OAUTH2_CLIENT_ID = sys.argv[1]
 OAUTH2_CLIENT_SECRET = sys.argv[2]
@@ -86,8 +86,8 @@ API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
 AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
 TOKEN_URL = API_BASE_URL + '/oauth2/token'
 
-PAYPAL_ID = sys.argv[2]
-PAYPAL_SECRET = sys.argv[3]
+PAYPAL_ID = sys.argv[3]
+PAYPAL_SECRET = sys.argv[4]
 
 app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
 
@@ -471,6 +471,28 @@ def authenticate_user():
 
 @app.route('/me')
 def me():
+    global connection, crsr
+
+    try:
+        db_start()
+        bal = balance(int(g.id if not g.id == None else None))
+        db_close()
+    except Exception as e:
+        print(e)
+        bal = 0
+
+    try:
+        db_start()
+        sql_command = "SELECT therank FROM (SELECT balances.*, RANK() OVER (ORDER BY SCORE DESC) AS therank FROM TABLE balances) balances WHERE user_id = %s" %g.id
+        crsr.execute(sql_command)
+        print(crsr.fetchall())
+
+        db_close()
+    except Exception as e:
+        print(e)
+        bal = 0
+
+
     try:
         discord = make_session(token=session.get('oauth2_token'))
         user = discord.get(API_BASE_URL + '/users/@me').json()
@@ -479,9 +501,9 @@ def me():
     except KeyError:
         return redirect("/login")
     else:
-        return render_template("profile_page.html", img = image, user=user)
+        return render_template("profile_page.html", img = image, bal=bal, user=user)
 
 
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0')
+    app.run(host= '0.0.0.0', port=5000)

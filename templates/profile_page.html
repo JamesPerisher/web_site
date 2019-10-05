@@ -6,9 +6,30 @@
 
 {% block head %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 {% endblock %}
 
 {% block content %}
-<img src="{{img}}" alt="">
-<p>{{user}}</p>
+<div class="info">
+
+  <h1>{{user["username"]}}'s Profile.</h1>
+  <p>If you would like to be removed from this record contact me.</p>
+
+  <table class="infotable">
+    <tr>
+      <td class="img"><img src="{{img}}" alt="Your profile image"></td>
+      <td>
+        <h2>{{user["username"]}}#{{user["discriminator"]}}</h2>
+        <p>{{user["email"]}}</p>
+      </td>
+      <td>
+        <p>Ranked</p>
+        <h1 id="rank">#-999999</h1>
+        <p>on the rich list</p>
+      </td>
+    </tr>
+  </table>
+
+  <h1>Balance: {{ bal if not session_name == None else 0 }} coins</h1>
+</div>
 {% endblock %}
