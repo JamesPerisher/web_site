@@ -112,14 +112,18 @@ def add_product_to_cart():
         local_cookie = list(request.cookies.get("cart").encode())
     except AttributeError:
         local_cookie = []
-    print(local_cookie, end=" --> ")
+
     resp = make_response(redirect(url_for('.shop')))
     try:
         id = int(request.form["id"])
         shopItems[id]
 
+        data_out = "{'method':'APPEND','item_id':%s,'username':'%s','id':%s,'previous_cart':%s,'new_cart':%s}"%(id, g.username, g.id, local_cookie, "{{replace_point}}")
+
         local_cookie.append(id)
-        print(local_cookie)
+
+        data_out = data_out.replace("{{replace_point}}",str(local_cookie))
+        print(data_out)
 
         resp.set_cookie("cart", bytes(local_cookie))
     except KeyError or ValueError as e:
@@ -132,15 +136,18 @@ def remove_product_from_cart():
         local_cookie = list(request.cookies.get("cart").encode())
     except AttributeError:
         local_cookie = []
-    print(local_cookie, end=" --> ")
+
     resp = make_response(redirect(url_for('.cart')))
     try:
         id = int(request.form["id"])
         shopItems[id]
 
+        data_out = "{'method':'REMOVE','item_id':%s,'username':'%s','id':%s,'previous_cart':%s,'new_cart':%s}"%(id, g.username, g.id, local_cookie, "{{replace_point}}")
+
         local_cookie.remove(id)
 
-        print(local_cookie)
+        data_out = data_out.replace("{{replace_point}}",str(local_cookie))
+        print(data_out)
 
         resp.set_cookie("cart", bytes(local_cookie))
     except KeyError or ValueError as e:
@@ -154,10 +161,10 @@ def shop():
 
     try:
         db_start()
-        bal = balance(int(g.id if not g.id == None else None))
+        bal = balance(int(g.id) if not g.id == None else None)
         db_close()
     except Exception as e:
-        print(e)
+        print("Unexpeced error for balance.")
         bal = 0
 
     return render_template("shop.html", shopItems = shopItems, bal= bal)
@@ -405,20 +412,28 @@ def queue():
 
 @app.before_request
 def before_request_func():
-    if request.url.startswith('https://'):
-        url = request.url.replace('https://', 'http://', 1)
-        return redirect(url, code=301)
-
-    discord = make_session(token=session.get('oauth2_token'))
-    user = discord.get(API_BASE_URL + '/users/@me').json()
     try:
-        user["code"]
-    except KeyError:
-        g.username = "%s#%s" %(user["username"], user["discriminator"])
-        g.id = user["id"]
-    else:
+        if request.url.startswith('https://'):
+            url = request.url.replace('https://', 'http://', 1)
+            return redirect(url, code=301)
+
+
+        discord = make_session(token=session.get('oauth2_token'))
+        print(discord)
+        user = discord.get(API_BASE_URL + '/users/@me').json()
+        print(user)
+        try:
+            user["code"]
+        except KeyError:
+            g.username = "%s#%s" %(user["username"], user["discriminator"])
+            g.id = user["id"]
+        else:
+            g.username = None
+            g.id = None
+    except Exception as e:
         g.username = None
         g.id = None
+        raise e
 
 
 def token_updater(token):
