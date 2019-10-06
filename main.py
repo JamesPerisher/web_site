@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template, redirect, request, session, jsonify, g, url_for, make_response
 from requests_oauthlib import OAuth2Session
 from werkzeug.datastructures import ImmutableOrderedMultiDict
+from collections import OrderedDict as OrderedDict_old
 from decimal import *
 import json, sqlite3
 import time, pytz
@@ -11,7 +12,7 @@ import sys
 import random
 import requests
 
-shopItems = {}
+shopItems = OrderedDict_old()
 print(getcontext())
 class sale_item():
     def __init__(self, title="", description="", price=1000, coins=10, image="static/images/shop_images/error.png", iscoin=False):
@@ -33,10 +34,10 @@ class sale_item():
         return self
 
 
+
 sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("2.50"),   20000, "static/images/shop_images/error.png", True).add(shopItems)
 sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("12.69"), 100000, "static/images/shop_images/error.png", True).add(shopItems)
 sale_item(" Coins", "Coin purchase at about {amt} per coin", Decimal("20.00"), 200000, "static/images/shop_images/error.png", True).add(shopItems)
-
 
 
 def db_start():
@@ -89,10 +90,29 @@ TOKEN_URL = API_BASE_URL + '/oauth2/token'
 PAYPAL_ID = sys.argv[3]
 PAYPAL_SECRET = sys.argv[4]
 
+PORT = sys.argv[5]
+
 app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
 
 if 'http://' in OAUTH2_REDIRECT_URI:
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = 'true'
+
+
+@app.context_processor
+def utility_processor():
+    def OrderedDict(*args, **kwords):
+        return OrderedDict_old(*args, **kwords)
+    return dict(OrderedDict=OrderedDict)
+
+
+
+
+
+
+
+
+
+
 
 @app.route("/")
 def home():
@@ -567,4 +587,4 @@ def me():
 
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=4000, ssl_context='adhoc')
+    app.run(host= '0.0.0.0', port=PORT, ssl_context='adhoc')
