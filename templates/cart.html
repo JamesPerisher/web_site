@@ -10,7 +10,6 @@
 {% endblock %}
 
 {% block content %}
-
 <div class="sidebar">
   <table>
     <tr>
@@ -36,9 +35,10 @@
 
 {% else %}
 
+
 <div class="itemList">
-  {% for i in cartItems %}
   <table class="shopItem">
+    {% for i in cartItems %}
     <form action="remove" method="post">
       <input type="hidden" name="id" value="{{i.id}}">
       <tr>
@@ -59,31 +59,27 @@
         </th>
       </tr>
     </form>
-  </table>
-  {% endfor %}
-  <table class="shopItem">
+    {% endfor %}
     <tr>
       <th>
         <div class="texts">
           <h2>Total price</h2>
         </div>
       </th>
-      <th style="width: 5%"></th>
-      <th style="width: 20%;">
+      <th>
         <div class="price">
-          <h2>${{totalPrice}}</h2>
+          <h2 style="text-align: left">${{totalPrice}}</h2>
         </div>
       </th>
       <th style="width: 33%;">
         <div class="price">
           <div class="buttons">
 
-
             <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
               <input type="hidden" name="cmd" value="_xclick">
               <input type="hidden" name="business" value="NBP7ZB7W8YX9Q">
               <input type="hidden" name="lc" value="AU">
-              <input type="hidden" name="item_name" value="checkoutbutton">
+              <input type="hidden" name="item_name" value="{{ cartItemIds }}">
               <input type="hidden" name="amount" value="{{totalPrice}}">
               <input type="hidden" name="currency_code" value="USD">
               <input type="hidden" name="button_subtype" value="services">

@@ -10,34 +10,36 @@
 {% block content %}
 
 <div class="itemList">
-  {% for i in shopItems %}
-  {% set i = shopItems[i] %}
   <table class="shopItem">
-    <form action="/add" method="post" name="shop">
-      <input type="hidden" name="id" value="{{i.id}}">
-      <tr>
-        <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
-        <th>
-          <div class="texts">
-            <h2>{{i.title}}</h2>
-            <p>{{i.description}}</p>
-          </div>
-        </th>
-        <th>
-          <div class="price">
-            <h2>${{i.price}}</h2>
-            <div class="buttons">
-              <button type="button" name="button">Buy Now</button>
-              <button type="submit" name="button">Add to cart</button>
-            </div>
-          </div>
-        </th>
-      </tr>
-    </form>
-  </table>
-  {% endfor %}
+    {% for i in shopItems %}
+    {% set i = shopItems[i] %}
+    <tr>
+      <th style="width: 25%"><img src="{{i.image}}" alt="Shop Item image for: {{i.title}}"></th>
+      <th>
+        <div class="texts">
+          <h2>{{i.title}}</h2>
+          <p>{{i.description}}</p>
+        </div>
+      </th>
+      <th>
+        <div class="price">
+          <h2>${{i.price}}</h2>
+          <div class="buttons">
+            <form action="/buynow" method="post" name="shop">
+              <input type="hidden" name="id" value="{{i.id}}">
+              <button type="submit" name="button">Buy Now</button>
+            </form>
 
-  <table class="shopItem">
+            <form action="/add" method="post" name="shop">
+              <input type="hidden" name="id" value="{{i.id}}">
+              <button type="submit" name="button">Add to cart</button>
+            </form>
+          </div>
+        </div>
+      </th>
+    </tr>
+    {% endfor %}
+
     <tr>
       <th style="width: 25%"></th>
       <th></th>

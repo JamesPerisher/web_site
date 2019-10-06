@@ -76,7 +76,7 @@ def balance(user_id):
 app = Flask(__name__, template_folder='templates')
 app.debug = True
 
-root_url = "localhost:5000"
+root_url = "124.179.165.114:4000"
 
 OAUTH2_CLIENT_ID = sys.argv[1]
 OAUTH2_CLIENT_SECRET = sys.argv[2]
@@ -144,7 +144,11 @@ def remove_product_from_cart():
 
         data_out = "{'method':'REMOVE','item_id':%s,'username':'%s','id':%s,'previous_cart':%s,'new_cart':%s}"%(id, g.username, g.id, local_cookie, "{{replace_point}}")
 
-        local_cookie.remove(id)
+        try:
+            local_cookie.remove(id)
+        except ValueError:
+            print("{'method':'FORM_SPAM','item_id':%s,'username':'%s','id':%s,'previous_cart':%s}"%(id, g.username, g.id, local_cookie))
+            return make_response(redirect(url_for('.cart')))
 
         data_out = data_out.replace("{{replace_point}}",str(local_cookie))
         print(data_out)
@@ -195,7 +199,7 @@ def cart():
             t +=x.price
             sp.append(x)
 
-        resp = make_response(render_template("cart.html", cartItems = sp, bal=bal, totalPrice=t))
+        resp = make_response(render_template("cart.html", cartItems = sp, cartItemIds=[x.id for x in sp], bal=bal, totalPrice=t))
     except KeyError or ValueError as e:
         resp.set_cookie("cart", bytes([]))
         print("cart error")
@@ -206,50 +210,79 @@ def cart():
 
 
 
-@app.route('/paypal/ipn/',methods=['POST'])
+@app.route('/paypal/ipn',methods=['POST'])
 def paypal_ipn():
     try:
         arg = ''
         request.parameter_storage_class = ImmutableOrderedMultiDict
         values = request.form
-        for x, y in values.iteritems():
+        print(values)
+        for x, y in values.items():
             arg += "&{x}={y}".format(x=x,y=y)
+
+        print(arg)
 
         validate_url = 'https://www.sandbox.paypal.com' \
                        '/cgi-bin/webscr?cmd=_notify-validate{arg}' \
                        .format(arg=arg)
         r = requests.get(validate_url)
+        print(r)
         if r.text == 'VERIFIED':
             try:
-                payer_email =  thwart(request.form.get('payer_email'))
+                payer_email =  request.form.get('payer_email')
                 unix = int(time.time())
-                payment_date = thwart(request.form.get('payment_date'))
-                username = thwart(request.form.get('custom'))
-                last_name = thwart(request.form.get('last_name'))
-                payment_gross = thwart(request.form.get('payment_gross'))
-                payment_fee = thwart(request.form.get('payment_fee'))
+                payment_date = request.form.get('payment_date')
+                user_id_name = request.form.get('custom')
+                item_name = request.form.get('item_name')
+                last_name = request.form.get('last_name')
+                payment_gross = request.form.get('payment_gross')
+                payment_fee = request.form.get('payment_fee')
                 payment_net = float(payment_gross) - float(payment_fee)
-                payment_status = thwart(request.form.get('payment_status'))
-                txn_id = thwart(request.form.get('txn_id'))
+                payment_status = request.form.get('payment_status')
+                txn_id = request.form.get('txn_id')
             except Exception as e:
-                with open('/ipnout.txt','a') as f:
+                with open('ipnout.txt','a') as f:
                     data = 'ERROR WITH IPN DATA\n'+str(values)+'\n'
+                    print(data)
                     f.write(data)
 
-            with open('/ipnout.txt','a') as f:
+
+            totalcoins = 0
+            for i in item_name.replace("[", "").replace("]", "").split(","):
+                try:
+                    current_item = shopItems[int(i.strip())]
+                    totalcoins += current_item.coins
+                except ValueError:
+                    pass
+
+            totalprice = 0
+            for i in item_name.replace("[", "").replace("]", "").split(","):
+                try:
+                    totalprice += current_item.price
+                except ValueError:
+                    pass
+
+            if totalprice > Decimal(payment_gross):
+                raise ValueError("Spoofed payment", "Actual price: %s, Paid price was: %s."%(totalprice, payment_gross))
+
+            with open('ipnout.txt','a') as f:
                 data = 'SUCCESS\n'+str(values)+'\n'
+                print(data)
+                print("\n\nTODO: add %s from items with ids %s coin to %s's account"%(totalcoins, item_name, user_id_name))
                 f.write(data)
 
-            print("Update coins for:", unix, payment_date, username, last_name, payment_gross, payment_fee, payment_net, payment_status, txn_id)
+            print("Update coins for:", unix, payment_date, user_id_name, last_name, payment_gross, payment_fee, payment_net, payment_status, txn_id)
 
 
         else:
             with open('/tmp/ipnout.txt','a') as f:
                 data = 'FAILURE\n%s\n'%str(values)
+                print(data)
                 f.write(data)
 
         return r.text
     except Exception as e:
+        raise e
         return str(e)
 
 
@@ -317,7 +350,22 @@ def discord_bot():
 
 @app.route('/thank_you')
 def thank_you():
-    return render_template("thank_you.html")
+    reason = request.args.get('reason')
+    h = "There seems to be an error with this page!"
+    p = "Request argument was not provided contact @PaulN07#2596 via discord to report a bug."
+    if reason == "donate":
+        h = "Thank you for donating!"
+        p = "Your donation is appreciated and will help support the future of this page and my projects."
+
+    if reason == "purchase":
+        h = "Thank you for purchasing items!"
+        p = "Your transaction was successful."
+
+        x = make_response(render_template("thank_you.html", h=h, p=p))
+        x.delete_cookie("cart")
+
+        return x
+    return render_template("thank_you.html", h=h, p=p)
 
 
 def que24(data):
@@ -413,15 +461,13 @@ def queue():
 @app.before_request
 def before_request_func():
     try:
-        if request.url.startswith('https://'):
-            url = request.url.replace('https://', 'http://', 1)
+        if request.url.startswith('http://'):
+            url = request.url.replace('http://', 'https://', 1)
             return redirect(url, code=301)
 
 
         discord = make_session(token=session.get('oauth2_token'))
-        print(discord)
         user = discord.get(API_BASE_URL + '/users/@me').json()
-        print(user)
         try:
             user["code"]
         except KeyError:
@@ -434,7 +480,6 @@ def before_request_func():
         g.username = None
         g.id = None
         raise e
-
 
 def token_updater(token):
     session['oauth2_token'] = token
@@ -511,6 +556,7 @@ def me():
     try:
         discord = make_session(token=session.get('oauth2_token'))
         user = discord.get(API_BASE_URL + '/users/@me').json()
+        print(user)
 
         image = "https://cdn.discordapp.com/avatars/%s/%s.png?size=1024" %(user["id"], user["avatar"])
     except KeyError:
@@ -521,4 +567,4 @@ def me():
 
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0', port=5000)
+    app.run(host= '0.0.0.0', port=4000, ssl_context='adhoc')
