@@ -110,6 +110,11 @@ html {
   height: 40px;
 }
 
+.footer table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .topnav-mobile {
   float: none;
   display: block;

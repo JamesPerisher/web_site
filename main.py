@@ -1,3 +1,23 @@
+
+
+################################################################################
+# PAULN07 WEBSITE                                                              #
+#                                                                              #
+#       my basic website routes importing                                      #
+#       templeates from /templates, static images, js and css                  #
+#       located in /static/images, /static/js and /static/css                  #
+#                                                                              #
+#      PAGES                                                                   #
+#       Home "/", Discord Bot "/discord_bot", Queue "/queue", Resource Pack    #
+#       "/res_pack", Shop "shop", Item Cart "/cart"                            #
+#                                                                              #
+#      API                                                                     #
+#                                                                              #
+#                                                          DESIGNED BY PAULN07 #
+################################################################################
+
+
+
 from flask import Flask
 from flask import render_template, redirect, request, session, jsonify, g, url_for, make_response
 from requests_oauthlib import OAuth2Session
@@ -77,11 +97,12 @@ def balance(user_id):
 app = Flask(__name__, template_folder='templates')
 app.debug = True
 
-root_url = "124.179.165.114:4000"
+root_url = "124.179.220.50:5000"
 
 OAUTH2_CLIENT_ID = sys.argv[1]
 OAUTH2_CLIENT_SECRET = sys.argv[2]
-OAUTH2_REDIRECT_URI = "http://%s/authenticate_user"%root_url
+OAUTH2_REDIRECT_URI = "https://%s/authenticate_user"%root_url
+API_AUTH = sys.argv[5]
 
 API_BASE_URL = os.environ.get('API_BASE_URL', 'https://discordapp.com/api')
 AUTHORIZATION_BASE_URL = API_BASE_URL + '/oauth2/authorize'
@@ -90,7 +111,7 @@ TOKEN_URL = API_BASE_URL + '/oauth2/token'
 PAYPAL_ID = sys.argv[3]
 PAYPAL_SECRET = sys.argv[4]
 
-PORT = sys.argv[5]
+PORT = sys.argv[6]
 
 app.config['SECRET_KEY'] = OAUTH2_CLIENT_SECRET
 
@@ -106,13 +127,92 @@ def utility_processor():
 
 
 
+###API
+
+def jsony(status, **kwords):
+    return jsonify(data=kwords, status=status, access_ip=request.remote_addr, access_date=time.time())
+
+@app.route("/api")
+def api():
+    if not request.args.get('auth') == API_AUTH:
+        return jsony("Success", available_api=["/api/queue", "/api/balance", "/api/baltop"])
+    return jsony("Success", available_api=["/api/queue", "/api/balance", "/api/baltop"], authorised_api=["api/send_coins", "api/create_coins"])
+
+
+@app.route("/api/queue")
+def api_queue():
+    return jsony("ServerIssue", queue="N/A", fetch_time=time.time()-200)
+
+
+@app.route("/api/balance")
+def api_balance():
+    user_id = request.args.get('user_id')
+    if user_id == None:
+        return jsony("UsageError", usage="/api/balance?user_id=<user_id>")
+
+    return jsony("Success", user_id=user_id, user_name="name%s"%user_id, balance=0)
+
+
+@app.route("/api/baltop")
+def api_baltop():
+    number = request.args.get('n')
+    if number == None:
+        return jsony("UsageError", usage="/api/baltop?n=<number_of_results>")
+    try:
+        number = int(number)
+    except ValueError:
+        return jsony("UsageError", usage="/api/baltop?n=<number_of_results>", error="'n' must be an integer")
+
+    if not request.args.get('auth') == API_AUTH:
+        max_res = 20
+        if number > max_res:
+            number = max_res
+            return jsony("Success", baltop={x:{"user_id":x*10000, "username":"%s_name"%x, "balance":((number-x)*10000+37712)} for x in range(number)}, warn="Maximum number of results is %s"%max_res)
+
+    return jsony("Success", baltop={x:{"user_id":x*10000, "username":"%s_name"%x, "balance":((number-x)*10000+37712)} for x in range(number)})
+
+@app.route("/api/send_coins")
+def api_send_coins():
+    if not request.args.get('auth') == API_AUTH:
+        return jsony("PermissionError", error="You are not authorised to do this.")
+
+    from_user = request.args.get('from_user')
+    to_user = request.args.get('to_user')
+    amount = request.args.get('amount')
+
+    if from_user == None or to_user == None or amount == None:
+        return jsony("UsageError", usage="/api/send_coins?from_user=<user_id>&to_user=<user_id&amount=<integer>")
+
+    try:
+        amount = int(amount)
+    except ValueError:
+        return jsony("UsageError", usage="/api/send_coins?from_user=<user_id>&to_user=<user_id&amount=<integer>", error="'amount' must be an integer")
+
+    return jsony("Success", from_user=from_user, to_user=to_user, amount=amount)
 
 
 
+@app.route("/api/create_coins")
+def api_create_coins():
+    if not request.args.get('auth') == API_AUTH:
+        return jsony("PermissionError", error="You are not authorised to do this.")
+
+    user = request.args.get('user')
+    amount = request.args.get('amount')
+
+    if user == None or amount == None:
+        return jsony("UsageError", usage="/api/create_coins?user=<user_id>&amount=<integer>")
+
+    try:
+        amount = int(amount)
+    except ValueError:
+        return jsony("UsageError", usage="/api/create_coins?user=<user_id>&amount=<integer>", error="'amount' must be an integer")
+
+    return jsony("Success", user=user, amount=amount)
 
 
 
-
+####User pages
 
 @app.route("/")
 def home():
